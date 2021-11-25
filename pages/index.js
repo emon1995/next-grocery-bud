@@ -39,7 +39,7 @@ export default function Home() {
   }
 
   const showAlert = (show=false, msg='', type='') => {
-    setAlert(show, msg, type);
+    setAlert({show, msg, type});
   }
 
   const clearList = () => {
@@ -70,7 +70,7 @@ export default function Home() {
       <section className='section-center'>
         <form className='grocery-form' onSubmit={handleSubmit}>
           {
-            alert.show && <Alert {...alert} />
+            alert.show && <Alert {...alert} removeAlert={showAlert} list={list} />
           }
           <h3>Grocery Bud</h3>
           <div className='form-control'>
