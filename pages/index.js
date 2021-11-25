@@ -1,13 +1,23 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Alert from '../components/Alert';
 import List from '../components/List';
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Home.module.css';
+import Cookies from 'js-cookie';
 
-export default function Home() {
+const getLocalStorage = () => {
+      let list = Cookies.get('list')
+      if (list) {
+        return (list = JSON.parse(Cookies.get('list')));
+      } else {
+        return [];
+      }
+    }
+
+ const Home = (props) => {
   const [name, setName] = useState('');
-  const [list, setList] = useState([]);
+  const [list, setList] = useState(getLocalStorage());
   const [isEditing, setIsEditing] = useState(false);
   const [editID, setEditID] = useState(null);
   const [alert, setAlert] = useState({show: false, msg: '', type: ''});
@@ -59,6 +69,12 @@ export default function Home() {
     setName(specificItem.title);
   }
 
+  useEffect(() => {
+    // localStorage.setItem('list', JSON.stringify(list));
+    Cookies.set('list', JSON.stringify(list));
+  }, [list]);
+  
+
   return (
     <div className={styles.container}>
       <Head>
@@ -93,3 +109,22 @@ export default function Home() {
     </div>
   )
 }
+
+// export async function getStaticProps(){
+//   const getLocalStorage = () => {
+//     let list = localStorage.getItem('list');
+//     if (list) {
+//       return (list = JSON.parse(localStorage.getItem('list')));
+//     } else {
+//       return [];
+//     }
+//   }
+
+//   return{
+//     props:{
+//       getLocalStorage: getLocalStorage()
+//     }
+//   }
+// }
+
+export default Home;
